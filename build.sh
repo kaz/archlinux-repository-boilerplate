@@ -1,35 +1,30 @@
 #!/bin/bash -xe
 
-DIR=`pwd`
+DIR=$1
+ARCH=$2
 
-rm -f kaz.* *.pkg.tar.xz
+if [ -e $ARCH ]; then
+	echo "directory $ARCH exists. package build was skipped."
+	exit
+fi
 
-sudo pacman -Sy --noconfirm --needed \
-	openssl-1.0 \
-	pcre \
-	readline \
-	perl \
-	curl \
-	unzip \
-	zip \
-	git \
-	base-devel
+mkdir $ARCH
 
-for PKG in $(ls *.diff | sed 's/\.diff//g'); do
+for PKG in $(cat packages.yml | sed '/^$/d' | sed -E 's/^-\s+//'); do
 	cd $DIR
 	rm -rf /tmp/$PKG
-
 	git clone https://aur.archlinux.org/$PKG.git /tmp/$PKG
-	patch /tmp/$PKG/PKGBUILD $DIR/$PKG.diff
+
+	PATCH=$DIR/patch/$PKG.diff
+	if [ -f $PATCH ]; then
+		patch /tmp/$PKG/PKGBUILD $PATCH
+	fi
 
 	cd /tmp/$PKG
 	makepkg --skippgpcheck
 	sudo pacman -U --noconfirm *.pkg.tar.xz
-	cp *.pkg.tar.xz $DIR
+	cp *.pkg.tar.xz $DIR/$ARCH
 
 	cd $DIR
 	rm -rf /tmp/$PKG
 done
-
-cd $DIR
-repo-add kaz.db.tar.gz *.pkg.tar.xz
