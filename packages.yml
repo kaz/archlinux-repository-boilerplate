@@ -1,0 +1,8 @@
+- openresty
+- openresty_luarocks
+
+- nodenv
+- nodenv-node-build
+
+- spl-dkms
+- zfs-dkms
