@@ -27,8 +27,8 @@ clean:
 
 .PHONY: commit
 commit: database
-	git config user.email "build-system@6715.jp"
-	git config user.name "arch-repository"
+	git config user.email "arch-repo@kaz.github.io"
+	git config user.name "arch-repo"
 	git checkout master
 	git reset --hard
 	rm .gitignore
