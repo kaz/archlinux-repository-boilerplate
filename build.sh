@@ -1,14 +1,9 @@
-#!/bin/bash -xe
+#!/bin/bash
 
-DIR=$1
-ARCH=$2
+ARCH=$1
+DIR=`pwd`
 
-if [ -e $ARCH ]; then
-	echo "directory $ARCH exists. package build was skipped."
-	exit
-fi
-
-mkdir $ARCH
+mkdir -p $ARCH
 
 for PKG in $(cat packages.yml | sed '/^$/d' | sed -E 's/^-\s+//'); do
 	cd $DIR
@@ -19,6 +14,15 @@ for PKG in $(cat packages.yml | sed '/^$/d' | sed -E 's/^-\s+//'); do
 	if [ -f $PATCH ]; then
 		patch /tmp/$PKG/PKGBUILD $PATCH
 	fi
+
+	source /tmp/$PKG/PKGBUILD
+	TARGET=$pkgname-$pkgver-$pkgrel
+	if [ -f $DIR/$ARCH/$TARGET-*.pkg.tar.xz ]; then
+		printf "\033[97;44m>>> [Skipped] '$TARGET' already exists <<<\033[0m\n"
+		continue
+	fi
+
+	printf "\033[97;42m>>> [Start] building '$TARGET' <<<\033[0m\n"
 
 	cd /tmp/$PKG
 	makepkg --skippgpcheck
