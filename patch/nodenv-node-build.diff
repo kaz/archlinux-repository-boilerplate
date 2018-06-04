@@ -2,9 +2,9 @@
 < pkgver=2.6.23
 < pkgrel=1
 ---
-> pkgver=3.0.9
+> pkgver=3.0.11
 > pkgrel=0
 13c13
 < md5sums=("e04a3ce60add8887341187c87f44bfb2")
 ---
-> md5sums=('3eae32a6eb0367611022b7f98a1ee09c')
+> md5sums=('bbe252058c4532f8a3d496445bb39eaa')
