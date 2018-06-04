@@ -3,6 +3,7 @@
 ARCH=$1
 DIR=`pwd`
 
+sed -i "s/EUID == 0/0/" /usr/bin/makepkg
 mkdir -p $ARCH
 
 for PKG in $(cat packages.yml | sed '/^$/d' | sed -E 's/^-\s+//'); do
@@ -21,11 +22,12 @@ for PKG in $(cat packages.yml | sed '/^$/d' | sed -E 's/^-\s+//'); do
 		printf "\033[97;44m>>> [Skipped] '$TARGET' already exists <<<\033[0m\n"
 		continue
 	fi
+	rm -rf $DIR/$ARCH/$pkgname-*.pkg.tar.xz
 
 	printf "\033[97;42m>>> [Start] building '$TARGET' <<<\033[0m\n"
 
 	cd /tmp/$PKG
-	makepkg --skippgpcheck
+	makepkg --skippgpcheck --syncdeps
 	sudo pacman -U --noconfirm *.pkg.tar.xz
 	cp *.pkg.tar.xz $DIR/$ARCH
 
