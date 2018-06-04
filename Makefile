@@ -2,11 +2,10 @@ ARCH=`uname -a | sed -E 's/.+ (.+) .+/\1/'`
 
 .PHONY: commit
 commit: database
-	printf "/*\n!/$(ARCH)/\n*.old" > .gitignore
-	git branch -D gh-pages
+	git branch -D gh-pages || true
 	git checkout --orphan gh-pages
-	git rm -r --cached --ignore-unmatch *
-	git add -A
+	git rm -r --force --cached --ignore-unmatch * .gitignore
+	git add --all --force $(ARCH)/*
 	git config user.email "12085646+kaz@users.noreply.github.com"
 	git config user.name "Kazuki Sawada (buildsystem)"
 	git commit -m "built at `date +'%Y/%m/%d %H:%M:%S'`"
