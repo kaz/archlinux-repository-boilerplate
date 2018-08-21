@@ -27,7 +27,7 @@ for PKG in $(cat packages.yml | sed '/^$/d' | sed -E 's/^-\s+//'); do
 	printf "\033[97;42m>>> [Start] building '$TARGET' <<<\033[0m\n"
 
 	cd /tmp/$PKG
-	makepkg --skippgpcheck --syncdeps
+	makepkg --skippgpcheck --syncdeps --noconfirm
 	sudo pacman -U --noconfirm *.pkg.tar.xz
 	cp *.pkg.tar.xz $DIR/$ARCH
 
