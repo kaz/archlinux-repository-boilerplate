@@ -1,0 +1,6 @@
+11c11
+<          'python-llfuse' 'python-requests')
+---
+>          'python-llfuse' 'python-requests' 'cython')
+18a19
+>   cython src/s3ql/deltadump.pyx

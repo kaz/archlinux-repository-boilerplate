@@ -1,12 +1,15 @@
-- phantomjs
-
-- softethervpn
+- python-dugong
+- s3ql
 
 - openresty
 - openresty_luarocks
 
 - nodenv
 - nodenv-node-build
+
+- softethervpn
+
+- phantomjs
 
 - spl-dkms
 - zfs-dkms

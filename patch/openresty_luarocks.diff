@@ -2,7 +2,7 @@
 < pkgver=2.3.0
 < pkgrel=2
 ---
-> pkgver=2.4.4
+> pkgver=3.0.1
 > pkgrel=0
 13c13
 < source=(http://keplerproject.github.io/luarocks/releases/luarocks-$pkgver.tar.gz)
@@ -11,4 +11,4 @@
 15c15
 < sha256sums=( '68e38feeb66052e29ad1935a71b875194ed8b9c67c2223af5f4d4e3e2464ed97' )
 ---
-> sha256sums=('9eb3d0738fd02ad8bf39bcedccac4e83e9b5fff2bcca247c3584b925b2075d9c')
+> sha256sums=('f55df5c0c9ef7e15ba2aca4135a5e4a779719f6e3d835c614fef0c5b7a9850e8')
