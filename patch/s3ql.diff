@@ -1,6 +1,16 @@
+4,5c4,5
+< pkgver=2.28
+< pkgrel=1
+---
+> pkgver=2.30
+> pkgrel=0
 11c11
 <          'python-llfuse' 'python-requests')
 ---
 >          'python-llfuse' 'python-requests' 'cython')
+15c15
+< md5sums=('3533a5608ce009a6b834853c7fc4cae4')
+---
+> md5sums=('1377523499bfe7404d095636329f6c2b')
 18a19
 >   cython src/s3ql/deltadump.pyx
