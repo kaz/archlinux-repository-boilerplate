@@ -18,19 +18,19 @@ for PKG in $(cat packages.yml | sed '/^$/d' | sed -E 's/^-\s+//'); do
 
 	source /tmp/$PKG/PKGBUILD
 	TARGET=$pkgname-$pkgver-$pkgrel
-	if [ -f $DIR/$ARCH/$TARGET-*.pkg.tar.xz ]; then
-		printf "\033[97;44m>>> [Skipped] '$TARGET' already exists <<<\033[0m\n"
-		continue
+	PACKAGE=$DIR/$ARCH/$TARGET-*.pkg.tar.xz
+
+	if [ -f $PACKAGE ]; then
+		printf "\033[97;44m>>> [Exists] '$TARGET' already exists <<<\033[0m\n"
+	else
+		printf "\033[97;42m>>> [Start] building '$TARGET' <<<\033[0m\n"
+		rm -rf $DIR/$ARCH/$pkgname-*.pkg.tar.xz
+
+		cd /tmp/$PKG
+		makepkg --skippgpcheck --syncdeps --noconfirm
+		cp *.pkg.tar.xz $DIR/$ARCH
 	fi
-	rm -rf $DIR/$ARCH/$pkgname-*.pkg.tar.xz
 
-	printf "\033[97;42m>>> [Start] building '$TARGET' <<<\033[0m\n"
-
-	cd /tmp/$PKG
-	makepkg --skippgpcheck --syncdeps --noconfirm
-	sudo pacman -U --noconfirm *.pkg.tar.xz
-	cp *.pkg.tar.xz $DIR/$ARCH
-
-	cd $DIR
 	rm -rf /tmp/$PKG
+	sudo pacman -U --noconfirm --needed $DIR/$ARCH/*.pkg.tar.xz
 done
