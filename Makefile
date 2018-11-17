@@ -1,36 +1,48 @@
+.ONESHELL:
+
+BUILD_DIR=/tmp/build
+REPO_DIR=/tmp/repository
+
 ARCH=`uname -a | sed -E 's/.+ (.+) .+/\1/'`
 
+.PHONY: setup
+setup:
+	useradd -m build
+	chown -R build:build .
+	echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+	echo 'Server = http://mirror.rackspace.com/archlinux/$$repo/os/$$arch' > /etc/pacman.d/mirrorlist
+	pacman -Sy --noconfirm git
+
+.PHONY: tools
+tools:
+	git clone https://aur.archlinux.org/yay.git /tmp/yay
+	cd /tmp/yay
+	makepkg --syncdeps --noconfirm --install
+
+.PHONY: packages
+packages:
+	yay -Sy --noconfirm --makepkg $(CURDIR)/makepkg.sh --builddir $(BUILD_DIR) $$(sed '/^$$/d' packages.md | sed -E 's/^\s*-\s*//' | tr '\n' ' ')
+
+.PHONY: repository
+repository:
+	rm -rf $(REPO_DIR)
+	mkdir -p $(REPO_DIR)/$(ARCH)
+	cd $(REPO_DIR)/$(ARCH)
+	find $(BUILD_DIR) -name *.pkg.tar.xz -exec cp -f {} . \;
+	repo-add kaz.db.tar.gz *.pkg.tar.xz
+
 .PHONY: commit
-commit: database
-	git branch -D gh-pages || true
+commit:
+	cd $(REPO_DIR)
+	git init
 	git checkout --orphan gh-pages
-	git rm -r --force --cached --ignore-unmatch * .gitignore
-	git add --all --force $(ARCH)/*
+	git add -A
 	git config user.email "12085646+kaz@users.noreply.github.com"
-	git config user.name "Kazuki Sawada (buildsystem)"
-	git commit -m "built at `date +'%Y/%m/%d %H:%M:%S'`"
+	git config user.name "Kazuki Sawada (CircleCI)"
+	git commit -m "built at $$(date +'%Y/%m/%d %H:%M:%S')"
 
-.PHONY: database
-database: package
-	repo-add $(ARCH)/kaz.db.tar.gz $(ARCH)/*.pkg.tar.xz
-
-.PHONY: package
-package: init
-	./build.sh $(ARCH)
-
-.PHONY: init
-init:
-	sudo pacman -Sy --noconfirm --needed \
-		openssl-1.0 \
-		pcre \
-		readline \
-		perl \
-		curl \
-		unzip \
-		zip \
-		git \
-		base-devel
-
-.PHONY: clean
-clean:
-	rm -rf $(ARCH)
+.PHONY: push
+push:
+	cd $(REPO_DIR)
+	git remote add upstream https://$${GITHUB_ACCESS_TOKEN}@github.com/$${CIRCLE_PROJECT_USERNAME}/$${CIRCLE_PROJECT_REPONAME}
+	git push --force --set-upstream upstream gh-pages

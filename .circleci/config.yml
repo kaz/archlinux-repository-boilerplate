@@ -1,0 +1,35 @@
+version: 2
+jobs:
+  build:
+    branches:
+        only:
+          - master
+    docker:
+      - image: archimg/base-devel
+    working_directory: /project
+    steps:
+      - checkout
+      - restore_cache:
+          key: yay-cache
+      - run:
+          name: Setup build environment
+          command: make setup
+      - run:
+          name: Setup tools
+          command: sudo -ubuild make tools
+      - run:
+          name: Build packages
+          command: sudo -ubuild make packages
+      - save_cache:
+          key: yay-cache
+          paths:
+            - /tmp/build
+      - run:
+          name: Create repository
+          command: make repository
+      - run:
+          name: Commit
+          command: make commit
+      - run:
+          name: Push to Github
+          command: make push

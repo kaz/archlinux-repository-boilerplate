@@ -1,6 +1,6 @@
-# kaz's archlinux package repository
+# @kaz's archlinux package repository
 
-Currently, only `x86_64` is supported.
+[![CircleCI](https://circleci.com/gh/kaz/arch-repo.svg?style=svg)](https://circleci.com/gh/kaz/arch-repo)
 
 ## List of packages
 

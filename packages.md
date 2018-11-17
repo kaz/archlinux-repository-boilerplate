@@ -1,0 +1,8 @@
+- nodenv
+	- nodenv-node-build
+- openresty
+	- openresty_luarocks
+- s3ql
+- zfs-linux
+- softethervpn
+- phantomjs-bin
