@@ -27,6 +27,7 @@ packages:
 repository:
 	rm -rf $(REPO_DIR)
 	mkdir -p $(REPO_DIR)/$(ARCH)
+	cp -r .circleci $(REPO_DIR)
 	cd $(REPO_DIR)/$(ARCH)
 	find $(BUILD_DIR) -name *.pkg.tar.xz -exec cp -f {} . \;
 	repo-add kaz.db.tar.gz *.pkg.tar.xz
