@@ -1,3 +1,4 @@
+- yay
 - nodenv
 	- nodenv-node-build
 - openresty
