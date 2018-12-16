@@ -8,7 +8,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: yay-cache
+          key: yay-cache-{{ .Environment.CACHE_KEY }}
       - run:
           name: Setup build environment
           command: make setup
@@ -22,7 +22,7 @@ jobs:
           name: Create repository
           command: make repository
       - save_cache:
-          key: yay-cache
+          key: yay-cache-{{ .Environment.CACHE_KEY }}
           paths:
             - /tmp/build
       - persist_to_workspace:
