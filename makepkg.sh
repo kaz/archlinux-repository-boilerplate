@@ -6,4 +6,4 @@ if [ -f $DIFF ]; then
 	makepkg --syncdeps --noconfirm --nobuild
 fi
 
-makepkg $@
+makepkg --skippgpcheck $@

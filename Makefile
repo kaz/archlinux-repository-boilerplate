@@ -21,7 +21,7 @@ tools:
 
 .PHONY: packages
 packages:
-	yay -Sy --noconfirm --makepkg $(CURDIR)/makepkg.sh --builddir $(BUILD_DIR) $$(sed '/^$$/d' packages.md | sed -E 's/^\s*-\s*//' | tr '\n' ' ')
+	yay -Sy --noconfirm --nopgpfetch --makepkg $(CURDIR)/makepkg.sh --builddir $(BUILD_DIR) $$(sed '/^$$/d' packages.md | sed -E 's/^\s*-\s*//' | tr '\n' ' ')
 
 .PHONY: repository
 repository:
