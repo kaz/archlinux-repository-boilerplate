@@ -10,7 +10,7 @@ setup:
 	useradd -m build
 	chown -R build:build .
 	echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-	echo 'Server = http://mirrors.evowise.com/archlinux/$$repo/os/$$arch' > /etc/pacman.d/mirrorlist
+	cat mirrorlist > /etc/pacman.d/mirrorlist
 	pacman -Sy --noconfirm git
 
 .PHONY: tools
