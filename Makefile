@@ -11,13 +11,11 @@ setup:
 	chown -R build:build .
 	echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 	cat mirrorlist > /etc/pacman.d/mirrorlist
-	pacman -Sy --noconfirm git
-
-.PHONY: tools
-tools:
-	git clone https://aur.archlinux.org/yay.git /tmp/yay
-	cd /tmp/yay
-	makepkg --syncdeps --noconfirm --install
+	printf '\n[kaz]\nSigLevel = Optional\nServer = https://kaz.github.io/arch-repo/$$arch/\n' >> /etc/pacman.conf
+	pacman -Sy --noconfirm yay git ccache
+	sed -i '/\[kaz\]/,$$d' /etc/pacman.conf
+	sed -i 's/!ccache/ccache/g' /etc/makepkg.conf
+	printf 'cache_dir = /tmp/ccache' > /etc/ccache.conf
 
 .PHONY: packages
 packages:

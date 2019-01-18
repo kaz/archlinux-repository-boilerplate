@@ -8,13 +8,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: yay-cache-{{ .Environment.CACHE_KEY }}
+          key: ccache-{{ .Environment.CACHE_KEY }}
       - run:
           name: Setup build environment
           command: make setup
-      - run:
-          name: Setup tools
-          command: sudo -ubuild make tools
       - run:
           name: Build packages
           command: sudo -ubuild make packages
@@ -22,9 +19,9 @@ jobs:
           name: Create repository
           command: make repository
       - save_cache:
-          key: yay-cache-{{ .Environment.CACHE_KEY }}
+          key: ccache-{{ .Environment.CACHE_KEY }}
           paths:
-            - /tmp/build
+            - /tmp/ccache
       - persist_to_workspace:
           root: /tmp/repository
           paths:
