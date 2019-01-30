@@ -8,7 +8,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: ccache-{{ .Environment.CACHE_KEY }}
+          key: cache-{{ .Environment.CACHE_KEY }}
       - run:
           name: Setup build environment
           command: make setup
@@ -21,6 +21,7 @@ jobs:
       - save_cache:
           key: ccache-{{ .Environment.CACHE_KEY }}
           paths:
+            - /tmp/build
             - /tmp/ccache
       - persist_to_workspace:
           root: /tmp/repository
