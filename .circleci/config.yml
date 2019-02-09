@@ -4,11 +4,14 @@ jobs:
   build:
     working_directory: /project
     docker:
-      - image: archimg/base-devel
+      - image: archlinux/base
     steps:
       - checkout
       - restore_cache:
           key: cache-{{ .Environment.CACHE_KEY }}
+      - run:
+          name: Install make
+          command: pacman -Sy --noconfirm make
       - run:
           name: Setup build environment
           command: make setup

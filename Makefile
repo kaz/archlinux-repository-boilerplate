@@ -9,10 +9,10 @@ ARCH=`uname -a | sed -E 's/.+ (.+) .+/\1/'`
 setup:
 	useradd -m build
 	chown -R build:build .
-	echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+	echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 	cat mirrorlist > /etc/pacman.d/mirrorlist
 	printf '\n[kaz]\nSigLevel = Optional\nServer = https://kaz.github.io/arch-repo/$$arch/\n' >> /etc/pacman.conf
-	pacman -Sy --noconfirm yay git ccache
+	pacman -Sy --noconfirm yay git ccache base-devel
 	sed -i '/\[kaz\]/,$$d' /etc/pacman.conf
 	sed -i 's/!ccache/ccache/g' /etc/makepkg.conf
 	printf 'cache_dir = /tmp/ccache' > /etc/ccache.conf
