@@ -12,7 +12,7 @@ setup:
 	echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 	cat mirrorlist > /etc/pacman.d/mirrorlist
 	printf '\n[kaz]\nSigLevel = Optional\nServer = https://kaz.github.io/arch-repo/$$arch/\n' >> /etc/pacman.conf
-	pacman -Sy --noconfirm yay git ccache base-devel
+	pacman -Syu --noconfirm --needed yay git ccache
 	sed -i '/\[kaz\]/,$$d' /etc/pacman.conf
 	sed -i 's/!ccache/ccache/g' /etc/makepkg.conf
 	printf 'cache_dir = /tmp/ccache' > /etc/ccache.conf

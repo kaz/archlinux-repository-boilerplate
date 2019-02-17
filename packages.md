@@ -7,3 +7,4 @@
 - zfs-linux
 - softethervpn
 - phantomjs-bin
+- mongodb-bin

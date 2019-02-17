@@ -10,8 +10,8 @@ jobs:
       - restore_cache:
           key: cache-{{ .Environment.CACHE_KEY }}
       - run:
-          name: Install make
-          command: pacman -Sy --noconfirm make
+          name: Install development toolchain
+          command: pacman -Syu --noconfirm --needed base-devel
       - run:
           name: Setup build environment
           command: make setup
