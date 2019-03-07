@@ -1,4 +1,6 @@
 - yay
+- stns
+	- libnss-stns
 - nodenv
 	- nodenv-node-build
 - openresty
