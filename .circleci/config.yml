@@ -7,25 +7,25 @@ jobs:
       - image: archlinux/base
     steps:
       - checkout
-      - restore_cache:
-          key: cache-{{ .Environment.CACHE_KEY }}
       - run:
           name: Install development toolchain
           command: pacman -Syu --noconfirm --needed base-devel
       - run:
           name: Setup build environment
           command: make setup
+      - restore_cache:
+          key: CACHE-ARCH-REPO-V1
       - run:
           name: Build packages
           command: sudo -ubuild make packages
-      - run:
-          name: Create repository
-          command: make repository
       - save_cache:
-          key: ccache-{{ .Environment.CACHE_KEY }}
+          key: CACHE-ARCH-REPO-V1
           paths:
             - /tmp/build
             - /tmp/ccache
+      - run:
+          name: Create repository
+          command: make repository
       - persist_to_workspace:
           root: /tmp/repository
           paths:
