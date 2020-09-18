@@ -1,6 +1,6 @@
 # @$GITHUB_USER's archlinux package repository
 
-![release](https://github.com/$GITHUB_USER/arch-repo/workflows/release/badge.svg)
+[![release](https://github.com/$GITHUB_USER/arch-repo/workflows/release/badge.svg)](https://github.com/$GITHUB_USER/arch-repo/actions?query=workflow%3Arelease)
 
 ## List of packages
 
