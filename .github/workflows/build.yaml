@@ -24,6 +24,12 @@ jobs:
           - yay
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          key: cache-${{ matrix.package }}
+          path: |
+            /tmp/build
+            /tmp/ccache
       - run: |
           ./tasks.sh mirrorlist
       - run: |
@@ -32,7 +38,7 @@ jobs:
           ./tasks.sh package ${{ matrix.package }}
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.package }}
+          name: artifact-${{ matrix.package }}
           path: /tmp/build
   publish:
     needs: build
