@@ -1,6 +1,6 @@
 # @kaz's archlinux package repository
 
-[![CircleCI](https://circleci.com/gh/kaz/arch-repo.svg?style=svg)](https://circleci.com/gh/kaz/arch-repo)
+![release](https://github.com/kaz/arch-repo/workflows/release/badge.svg)
 
 ## List of packages
 

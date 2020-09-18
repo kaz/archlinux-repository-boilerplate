@@ -1,0 +1,53 @@
+name: release
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: 0 15 * * *
+
+env:
+  COUNTRY: United States
+  UPSTREAM: https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
+  GITHUB_USER: ${{ github.repository_owner }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux
+    strategy:
+      matrix:
+        package:
+          - yay
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          ./tasks.sh mirrorlist
+      - run: |
+          ./tasks.sh setup
+      - run: |
+          ./tasks.sh package ${{ matrix.package }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.package }}
+          path: /tmp/build
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          path: /tmp/build
+      - run: |
+          ./tasks.sh repository
+      - run: |
+          ./tasks.sh setup_git
+      - run: |
+          ./tasks.sh commit
+      - run: |
+          ./tasks.sh push
