@@ -2,6 +2,7 @@
 
 BUILD_USER=builder
 
+CACHE_DIR=/tmp/ccache
 BUILD_DIR=/tmp/build
 REPO_DIR=/tmp/repository
 
@@ -18,7 +19,7 @@ mirrorlist() {
 setup() {
 	pacman -Syu --noconfirm --needed base-devel git ccache
 	printf "ALL ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${BUILD_USER}
-	printf "cache_dir = /tmp/ccache" > /etc/ccache.conf
+	printf "cache_dir = ${CACHE_DIR}" > /etc/ccache.conf
 	sed -i "s/!ccache/ccache/g" /etc/makepkg.conf
 	useradd -m ${BUILD_USER}
 	chown -R ${BUILD_USER}:${BUILD_USER} .
