@@ -5,10 +5,10 @@ on:
     branches:
       - master
   schedule:
-    - cron: 0 15 * * *
+    - cron: 0 15 * * * # <- You can change this
 
 env:
-  COUNTRY: United States
+  COUNTRY: United States # [!] Do not change. This env is used to find fast mirror server. (Github Actions' workers are running in US.)
   UPSTREAM: https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
   GITHUB_USER: ${{ github.repository_owner }}
 
@@ -20,8 +20,8 @@ jobs:
       image: archlinux
     strategy:
       matrix:
-        package:
-          - yay
+        package: # <- You can change this
+          - yay # [!] You should not remove this. This job uses self-built yay to build other packages.
           - libnss-stns
           - mongodb-bin
           - nodenv
