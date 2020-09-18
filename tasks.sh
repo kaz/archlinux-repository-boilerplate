@@ -29,18 +29,19 @@ setup_git() {
 	pacman -Sy --noconfirm --needed git
 }
 setup_yay() {
+	FAILED=0
 	if [ -z "${GITHUB_USER}" ]; then
-		setup_yay_fallback
+		FAILED=1
 	else
 		printf "\n[${GITHUB_USER}]\nSigLevel = Optional\nServer = https://${GITHUB_USER}.github.io/arch-repo/\$arch/\n" >> /etc/pacman.conf
-		pacman -Sy --noconfirm --needed yay || setup_yay_fallback
+		pacman -Sy --noconfirm --needed yay || FAILED=1
 		sed -i "/\[${GITHUB_USER}\]/,\$d" /etc/pacman.conf
 	fi
-}
-setup_yay_fallback() {
-	sudo -u ${BUILD_USER} git clone https://aur.archlinux.org/yay.git /tmp/yay
-	cd /tmp/yay
-	sudo -u ${BUILD_USER} makepkg --noconfirm --syncdeps --install
+	if (( $FAILED )); then
+		sudo -u ${BUILD_USER} git clone https://aur.archlinux.org/yay.git /tmp/yay
+		cd /tmp/yay
+		sudo -u ${BUILD_USER} makepkg --noconfirm --syncdeps --install
+	fi
 }
 
 package() {
