@@ -52,6 +52,7 @@ repository() {
 		return 1
 	fi
 	mkdir -p ${REPO_DIR}/${ARCH}
+	sed "s/\$GITHUB_USER/$GITHUB_USER/g" template.md > ${REPO_DIR}/${ARCH}/README.md
 	cd ${REPO_DIR}/${ARCH}
 	find ${BUILD_DIR} -name *.pkg.tar.zst -exec cp -f {} . \;
 	repo-add "${GITHUB_USER}.db.tar.gz" *.pkg.tar.zst
