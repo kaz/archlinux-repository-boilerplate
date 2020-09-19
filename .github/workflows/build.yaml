@@ -5,7 +5,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: 0 15 * * * # <- You can change this
+    - cron: 30 20 * * * # <- You can change this
 
 env:
   COUNTRY: United States # [!] Do not change. This env is used to find fast mirror server. (Github Actions' workers are running in US.)
