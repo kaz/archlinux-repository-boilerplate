@@ -38,8 +38,8 @@ setup_yay() {
 		sed -i "/\[${GITHUB_USER}\]/,\$d" /etc/pacman.conf
 	fi
 	if (( $FAILED )); then
-		sudo -u ${BUILD_USER} git clone https://aur.archlinux.org/yay.git /tmp/yay
-		cd /tmp/yay
+		sudo -u ${BUILD_USER} git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
+		cd /tmp/yay-bin
 		sudo -u ${BUILD_USER} makepkg --noconfirm --syncdeps --install
 	fi
 }

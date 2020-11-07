@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         package: # <- You can change this
-          - yay # [!] You should not remove this. This job uses self-built yay to build other packages.
+          - yay-bin # [!] You should not remove this. This job uses self-built yay to build other packages.
           - libnss-stns
           - mongodb-bin
           - nodenv
