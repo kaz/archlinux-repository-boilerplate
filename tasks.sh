@@ -45,6 +45,7 @@ setup_yay() {
 }
 
 package() {
+	sudo -u ${BUILD_USER} mkdir -p "${BUILD_DIR}"
 	sudo -u ${BUILD_USER} yay -Sy --noconfirm --nopgpfetch --mflags "--skippgpcheck" --builddir "${BUILD_DIR}" "$@"
 }
 
