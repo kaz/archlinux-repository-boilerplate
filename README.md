@@ -16,7 +16,7 @@ You can easily add AUR packages you like, and CI builds such packages daily.
 ## How to create your own repository?
 
 1. [Fork](https://docs.github.com/ja/github/getting-started-with-github/fork-a-repo) this repository.
-2. Specify packages you want to build [here](https://github.com/kaz/arch-repo/blob/master/.github/workflows/build.yaml#L23).
+2. Specify packages you want to build [here](https://github.com/kaz/arch-repo/blob/master/.github/workflows/build.yaml#L25-L27).
 3. That's all! 👏
 	- Wait some minutes and visit newly-created your package repository 👉 https://github.com/[YOUR_GITHUB_ACCOUNT]/arch-repo/tree/gh-pages
 

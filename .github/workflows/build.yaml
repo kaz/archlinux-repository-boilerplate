@@ -5,7 +5,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: 30 20 * * * # <- You can change this
+    - cron: 0 4 * * * # Change HERE to set build schedule
 
 env:
   COUNTRY: United States # [!] Do not change. This env is used to find fast mirror server. (Github Actions' workers are running in US.)
@@ -20,17 +20,11 @@ jobs:
       image: archlinux
     strategy:
       matrix:
-        package: # <- You can change this
-          - yay-bin # [!] You should not remove this. This job uses self-built yay to build other packages.
-          - libnss-stns
-          - mongodb-bin
-          - nodenv
-          - openresty_luarocks
-          - phantomjs-bin
-          - s3ql
-          - softethervpn
-          - stns
-          - zfs-linux
+        package:
+          - yay-bin # [!] You should not remove this. This workflow uses self-built yay to build other packages.
+          # Add packages you want HERE
+          # - zoom
+          # - google-chrome
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
