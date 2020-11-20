@@ -1,5 +1,3 @@
-# @{{GITHUB_REPO_OWNER}}'s ArchLinux package repository
-
 [![release](https://github.com/{{GITHUB_REPO_OWNER}}/{{GITHUB_REPO_NAME}}/workflows/release/badge.svg)](https://github.com/{{GITHUB_REPO_OWNER}}/{{GITHUB_REPO_NAME}}/actions?query=workflow%3Arelease)
 
 ## List of packages

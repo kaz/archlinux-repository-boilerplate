@@ -51,10 +51,19 @@ repository() {
 	ensure_env GITHUB_REPO_NAME
 
 	mkdir -p ${REPO_DIR}/${ARCH}
-	sed -e "s/{{ARCH}}/${ARCH}/g" -e "s/{{GITHUB_REPO_OWNER}}/${GITHUB_REPO_OWNER}/g" -e "s/{{GITHUB_REPO_NAME}}/${GITHUB_REPO_NAME}/g" template.md > "${REPO_DIR}/README.md"
+	render_template templates/README.md > "${REPO_DIR}/README.md"
+	render_template templates/_config.yml > "${REPO_DIR}/_config.yml"
+
 	cd ${REPO_DIR}/${ARCH}
 	find ${BUILD_DIR} -name *.pkg.tar.zst -exec cp -f {} . \;
 	repo-add "${GITHUB_REPO_OWNER}.db.tar.gz" *.pkg.tar.zst
+}
+
+render_template() {
+	ensure_env GITHUB_REPO_OWNER
+	ensure_env GITHUB_REPO_NAME
+
+	sed -e "s/{{ARCH}}/${ARCH}/g" -e "s/{{GITHUB_REPO_OWNER}}/${GITHUB_REPO_OWNER}/g" -e "s/{{GITHUB_REPO_NAME}}/${GITHUB_REPO_NAME}/g" "${1}"
 }
 
 commit() {
