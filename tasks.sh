@@ -11,6 +11,7 @@ ARCH=$(uname -m)
 
 : ${GIT_REMOTE:=""}
 : ${GIT_BRANCH:="gh-pages"}
+: ${GIT_COMMIT_SHA:=""}
 
 : ${GITHUB_ACTOR:=""}
 GITHUB_REPO_OWNER=${GITHUB_REPOSITORY%/*}
@@ -79,10 +80,15 @@ commit() {
 	cd ${REPO_DIR}
 	git init
 	git checkout --orphan "${GIT_BRANCH}"
-	git add -A
+	git add --all
 	git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-	git config user.name "${GITHUB_ACTOR} (github-actions)"
-	git commit -m "$(date +'%Y/%m/%d %H:%M:%S')"
+	git config user.name "${GITHUB_ACTOR}"
+
+	if [ -z "${GIT_COMMIT_SHA}" ]; then
+		git commit -m "built at $(date +'%Y/%m/%d %H:%M:%S')"
+	else
+		git commit -m "built from ${GIT_COMMIT_SHA}"
+	fi
 }
 
 push() {

@@ -14,6 +14,7 @@ env:
   CCACHE_DIR: /tmp/ccache
   GIT_REMOTE: https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
   GIT_BRANCH: gh-pages
+  GIT_COMMIT_SHA: ${{ github.sha }}
 
 jobs:
   build:
