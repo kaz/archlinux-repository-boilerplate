@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 BUILD_USER=builder
 
@@ -18,7 +18,7 @@ mirrorlist() {
 
 setup() {
 	pacman -Syu --noconfirm --needed base-devel git ccache
-	printf "ALL ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${BUILD_USER}
+	printf "${BUILD_USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${BUILD_USER}
 	printf "cache_dir = ${CACHE_DIR}" > /etc/ccache.conf
 	sed -i "s/!ccache/ccache/g" /etc/makepkg.conf
 	useradd -m ${BUILD_USER}
@@ -29,15 +29,10 @@ setup_git() {
 	pacman -Sy --noconfirm --needed git
 }
 setup_yay() {
-	FAILED=0
-	if [ -z "${GITHUB_USER}" ]; then
-		FAILED=1
+	parse_env
+	if ( pacman -Sy --noconfirm --needed --config <(printf "[${GIT_USER}]\nSigLevel = Optional\nServer = https://${GIT_USER}.github.io/${GIT_REPO}/${ARCH}/") yay ); then
+		:
 	else
-		printf "\n[${GITHUB_USER}]\nSigLevel = Optional\nServer = https://${GITHUB_USER}.github.io/arch-repo/\$arch/\n" >> /etc/pacman.conf
-		pacman -Sy --noconfirm --needed yay || FAILED=1
-		sed -i "/\[${GITHUB_USER}\]/,\$d" /etc/pacman.conf
-	fi
-	if (( $FAILED )); then
 		sudo -u ${BUILD_USER} git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
 		cd /tmp/yay-bin
 		sudo -u ${BUILD_USER} makepkg --noconfirm --syncdeps --install
@@ -50,28 +45,22 @@ package() {
 }
 
 repository() {
-	if [ -z "${GITHUB_USER}" ]; then
-		echo 'env $GITHUB_USER is not set'
-		return 1
-	fi
+	parse_env --must
 	mkdir -p ${REPO_DIR}/${ARCH}
-	sed "s/\$GITHUB_USER/$GITHUB_USER/g" template.md > ${REPO_DIR}/README.md
+	sed -e "s/{{ARCH}}/${ARCH}/g" -e "s/{{GIT_USER}}/${GIT_USER}/g" -e "s/{{GIT_REPO}}/${GIT_REPO}/g" template.md > "${REPO_DIR}/README.md"
 	cd ${REPO_DIR}/${ARCH}
 	find ${BUILD_DIR} -name *.pkg.tar.zst -exec cp -f {} . \;
-	repo-add "${GITHUB_USER}.db.tar.gz" *.pkg.tar.zst
+	repo-add "${GIT_USER}.db.tar.gz" *.pkg.tar.zst
 }
 
 commit() {
-	if [ -z "${GITHUB_USER}" ]; then
-		echo 'env $GITHUB_USER is not set'
-		return 1
-	fi
+	parse_env --must
 	cd ${REPO_DIR}
 	git init
 	git checkout --orphan gh-pages
 	git add -A
-	git config user.email "${GITHUB_USER}@users.noreply.github.com"
-	git config user.name "${GITHUB_USER} (github-actions)"
+	git config user.email "${GIT_USER}@users.noreply.github.com"
+	git config user.name "${GIT_USER} (github-actions)"
 	git commit -m "$(date +'%Y/%m/%d %H:%M:%S')"
 }
 
@@ -83,6 +72,15 @@ push() {
 	cd ${REPO_DIR}
 	git remote add origin "${GIT_REMOTE}"
 	git push --force --set-upstream origin gh-pages
+}
+
+parse_env() {
+	if [ "${1}" = "--must" ] && [ -z "${GITHUB_REPOSITORY}" ]; then
+		echo 'env $GITHUB_REPOSITORY is not set'
+		return 1
+	fi
+	GIT_USER=$(awk -F '/' '{print $1}' <<< "${GITHUB_REPOSITORY}")
+	GIT_REPO=$(awk -F '/' '{print $2}' <<< "${GITHUB_REPOSITORY}")
 }
 
 set -xe

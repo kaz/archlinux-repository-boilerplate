@@ -10,7 +10,6 @@ on:
 env:
   COUNTRY: United States # [!] Do not change. This env is used to find fast mirror server. (Github Actions' workers are running in US.)
   GIT_REMOTE: https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
-  GITHUB_USER: ${{ github.repository_owner }}
 
 jobs:
   build:
