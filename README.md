@@ -1,7 +1,8 @@
-# arch-repo
+# ArchLinux Repository Boilerplate
 
-This is a template repository for creating your own **automated** package repository for ArchLinux.
-You can easily add AUR packages you like, and CI builds such packages daily.
+This is a boilerplate for creating your own **automated** ArchLinux package repository.
+You can easily add any AUR packages you want.
+GitHub Actions runs daily build on behalf of you.
 
 ## Features
 
@@ -15,10 +16,12 @@ You can easily add AUR packages you like, and CI builds such packages daily.
 
 ## How to create your own repository?
 
-1. [Fork](https://docs.github.com/ja/github/getting-started-with-github/fork-a-repo) this repository.
+1. Click the green `Use this template` button ↗ to create your own github repository.
+	- You can find detailed instruction [here](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template).
+	- or [fork](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo) this repository.
 2. Specify packages you want to build [here](https://github.com/kaz/arch-repo/blob/master/.github/workflows/build.yaml#L25-L27).
 3. That's all! 👏
-	- Wait some minutes and visit newly-created your package repository 👉 https://github.com/[YOUR_GITHUB_ACCOUNT]/arch-repo/tree/gh-pages
+	- Wait some minutes and visit newly-created your package repository 👉 [https://github.com/{{your_account}}/{{your_name}}/tree/gh-pages](../../tree/gh-pages)
 
 ## Tips
 
