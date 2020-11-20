@@ -51,7 +51,6 @@ package() {
 
 repository() {
 	ensure_env GITHUB_REPO_OWNER
-	ensure_env GITHUB_REPO_NAME
 
 	mkdir -p ${REPO_DIR}/${ARCH}
 	render_template templates/README.md > "${REPO_DIR}/README.md"
@@ -63,6 +62,7 @@ repository() {
 }
 
 render_template() {
+	ensure_env GIT_BRANCH
 	ensure_env GITHUB_REPO_OWNER
 	ensure_env GITHUB_REPO_NAME
 
@@ -75,6 +75,7 @@ render_template() {
 }
 
 commit() {
+	ensure_env GIT_BRANCH
 	ensure_env GITHUB_ACTOR
 
 	cd ${REPO_DIR}
@@ -93,6 +94,7 @@ commit() {
 
 push() {
 	ensure_env GIT_REMOTE
+	ensure_env GIT_BRANCH
 
 	cd ${REPO_DIR}
 	git remote add origin "${GIT_REMOTE}"
