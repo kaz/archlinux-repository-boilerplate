@@ -76,12 +76,12 @@ commit() {
 }
 
 push() {
-	if [ -z "${UPSTREAM}" ]; then
-		echo 'env $UPSTREAM is not set'
+	if [ -z "${GIT_REMOTE}" ]; then
+		echo 'env $GIT_REMOTE is not set'
 		return 1
 	fi
 	cd ${REPO_DIR}
-	git remote add origin "${UPSTREAM}"
+	git remote add origin "${GIT_REMOTE}"
 	git push --force --set-upstream origin gh-pages
 }
 
