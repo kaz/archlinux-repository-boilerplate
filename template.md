@@ -1,17 +1,17 @@
-# @{{GIT_USER}}'s ArchLinux package repository
+# @{{GITHUB_REPO_OWNER}}'s ArchLinux package repository
 
-[![release](https://github.com/{{GIT_USER}}/{{GIT_REPO}}/workflows/release/badge.svg)](https://github.com/{{GIT_USER}}/{{GIT_REPO}}/actions?query=workflow%3Arelease)
+[![release](https://github.com/{{GITHUB_REPO_OWNER}}/{{GITHUB_REPO_NAME}}/workflows/release/badge.svg)](https://github.com/{{GITHUB_REPO_OWNER}}/{{GITHUB_REPO_NAME}}/actions?query=workflow%3Arelease)
 
 ## List of packages
 
-- [x86_64](https://github.com/{{GIT_USER}}/{{GIT_REPO}}/tree/gh-pages/{{ARCH}})
+- [{{ARCH}}](https://github.com/{{GITHUB_REPO_OWNER}}/{{GITHUB_REPO_NAME}}/tree/gh-pages/{{ARCH}})
 
 ## Usage
 
 Add following lines to your `/etc/pacman.conf`.
 
 ```
-[{{GIT_USER}}]
+[{{GITHUB_REPO_OWNER}}]
 SigLevel = Optional
-Server = https://{{GIT_USER}}.github.io/{{GIT_REPO}}/$arch/
+Server = https://{{GITHUB_REPO_OWNER}}.github.io/{{GITHUB_REPO_NAME}}/$arch/
 ```
