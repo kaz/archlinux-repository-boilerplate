@@ -13,6 +13,7 @@ env:
   BUILD_DIR: /tmp/build
   CCACHE_DIR: /tmp/ccache
   GIT_REMOTE: https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
+  GIT_BRANCH: gh-pages
 
 jobs:
   build:

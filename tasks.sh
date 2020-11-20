@@ -10,6 +10,8 @@ ARCH=$(uname -m)
 : ${CCACHE_DIR:="/tmp/ccache"}
 
 : ${GIT_REMOTE:=""}
+: ${GIT_BRANCH:="gh-pages"}
+
 : ${GITHUB_ACTOR:=""}
 GITHUB_REPO_OWNER=${GITHUB_REPOSITORY%/*}
 GITHUB_REPO_NAME=${GITHUB_REPOSITORY#*/}
@@ -63,7 +65,12 @@ render_template() {
 	ensure_env GITHUB_REPO_OWNER
 	ensure_env GITHUB_REPO_NAME
 
-	sed -e "s/{{ARCH}}/${ARCH}/g" -e "s/{{GITHUB_REPO_OWNER}}/${GITHUB_REPO_OWNER}/g" -e "s/{{GITHUB_REPO_NAME}}/${GITHUB_REPO_NAME}/g" "${1}"
+	sed \
+		-e "s/{{ARCH}}/${ARCH}/g" \
+		-e "s/{{GIT_BRANCH}}/${GIT_BRANCH}/g" \
+		-e "s/{{GITHUB_REPO_OWNER}}/${GITHUB_REPO_OWNER}/g" \
+		-e "s/{{GITHUB_REPO_NAME}}/${GITHUB_REPO_NAME}/g" \
+		"${1}"
 }
 
 commit() {
@@ -71,7 +78,7 @@ commit() {
 
 	cd ${REPO_DIR}
 	git init
-	git checkout --orphan gh-pages
+	git checkout --orphan "${GIT_BRANCH}"
 	git add -A
 	git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 	git config user.name "${GITHUB_ACTOR} (github-actions)"
@@ -83,7 +90,7 @@ push() {
 
 	cd ${REPO_DIR}
 	git remote add origin "${GIT_REMOTE}"
-	git push --force --set-upstream origin gh-pages
+	git push --force --set-upstream origin "${GIT_BRANCH}"
 }
 
 ensure_env() {
