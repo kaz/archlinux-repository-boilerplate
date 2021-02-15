@@ -16,6 +16,16 @@ ARCH=$(uname -m)
 GITHUB_REPO_OWNER=${GITHUB_REPOSITORY%/*}
 GITHUB_REPO_NAME=${GITHUB_REPOSITORY#*/}
 
+# This is a workaround to fix pacman cannot run correctly.
+# The problem will be fixed if GitHub Actions worker used runc 1.0.0-rc93, which is now rc92.
+# ref. https://github.com/actions/virtual-environments/issues/2658
+pacman() {
+	if ! md5sum -c <(echo e151f7aac8d3411e49e697b5461c34f9 /usr/lib/libc-2.33.so); then
+		curl -L https://repo.archlinuxcn.org/x86_64/glibc-linux4-2.33-4-x86_64.pkg.tar.zst | tar x --zstd -C /
+	fi
+	command pacman "$@"
+}
+
 initialize() {
 	pacman -Syu --noconfirm --needed git ccache
 	printf "${BUILD_USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${BUILD_USER}
