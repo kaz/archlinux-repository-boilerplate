@@ -21,7 +21,7 @@ jobs:
     continue-on-error: true
     runs-on: ubuntu-latest
     container:
-      image: archlinux
+      image: archlinux:base-devel
     strategy:
       matrix:
         package:
@@ -38,9 +38,7 @@ jobs:
             ${{ env.BUILD_DIR }}
             ${{ env.CCACHE_DIR }}
       - run: |
-          ./tasks.sh mirrorlist
-      - run: |
-          ./tasks.sh setup
+          ./tasks.sh initialize
       - run: |
           ./tasks.sh package ${{ matrix.package }}
       - uses: actions/upload-artifact@v2
@@ -51,7 +49,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     container:
-      image: archlinux
+      image: archlinux:base-devel
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2

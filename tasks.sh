@@ -2,7 +2,6 @@
 
 ARCH=$(uname -m)
 
-: ${COUNTRY:="Japan"}
 : ${BUILD_USER:="builder"}
 
 : ${REPO_DIR:="/tmp/repo"}
@@ -17,13 +16,8 @@ ARCH=$(uname -m)
 GITHUB_REPO_OWNER=${GITHUB_REPOSITORY%/*}
 GITHUB_REPO_NAME=${GITHUB_REPOSITORY#*/}
 
-mirrorlist() {
-	pacman -Sy --noconfirm --needed reflector
-	reflector --country "${COUNTRY}" --protocol http --sort rate --save /etc/pacman.d/mirrorlist
-}
-
-setup() {
-	pacman -Syu --noconfirm --needed base-devel git ccache
+initialize() {
+	pacman -Syu --noconfirm --needed git ccache
 	printf "${BUILD_USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${BUILD_USER}
 	printf "cache_dir = ${CCACHE_DIR}" > /etc/ccache.conf
 	sed -i "s/!ccache/ccache/g" /etc/makepkg.conf
