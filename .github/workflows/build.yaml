@@ -11,6 +11,7 @@ env:
   COUNTRY: United States # [!] Do not change. This env is used to find fast mirror server. (Github Actions' workers are running in US.)
   REPO_DIR: /tmp/repo
   BUILD_DIR: /tmp/build
+  PKGS_DIR: /tmp/_packages_
   CCACHE_DIR: /tmp/ccache
   GIT_REMOTE: https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
   GIT_BRANCH: gh-pages
@@ -44,7 +45,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: artifact-${{ matrix.package }}
-          path: ${{ env.BUILD_DIR }}
+          path: ${{ env.PKGS_DIR }}
   publish:
     needs: build
     runs-on: ubuntu-latest
@@ -54,7 +55,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
         with:
-          path: ${{ env.BUILD_DIR }}
+          path: ${{ env.PKGS_DIR }}
       - run: |
           ./tasks.sh repository
       - run: |
