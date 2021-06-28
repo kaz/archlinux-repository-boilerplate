@@ -63,6 +63,7 @@ repository() {
 	cd ${REPO_DIR}/${ARCH}
 	find ${BUILD_DIR} -name *.pkg.tar.zst -exec cp -f {} . \;
 	repo-add "${GITHUB_REPO_OWNER}.db.tar.gz" *.pkg.tar.zst
+	rename '.tar.gz' '' *.tar.gz	# repo-add originally creates links, this basically replaces them with the actual db archives
 }
 
 render_template() {
