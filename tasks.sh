@@ -6,6 +6,7 @@ ARCH=$(uname -m)
 
 : ${REPO_DIR:="/tmp/repo"}
 : ${BUILD_DIR:="/tmp/build"}
+: ${PKGS_DIR:="/tmp/_packages_"}
 : ${CCACHE_DIR:="/tmp/ccache"}
 
 : ${GIT_REMOTE:=""}
@@ -49,8 +50,11 @@ setup_yay() {
 }
 
 package() {
-	sudo -u ${BUILD_USER} mkdir -p "${BUILD_DIR}"
+	sudo -u ${BUILD_USER} mkdir -p "${BUILD_DIR}" "${PKGS_DIR}"
 	sudo -u ${BUILD_USER} yay -Sy --noconfirm --nopgpfetch --mflags "--skippgpcheck" --builddir "${BUILD_DIR}" "$@"
+ 	# Move package to PKGS_DIR
+	find "${BUILD_DIR}" -name "*.pkg.tar.zst"
+	cp -rv "${BUILD_DIR}/$@/"*.pkg.tar.zst "${PKGS_DIR}/"
 }
 
 repository() {
@@ -61,7 +65,7 @@ repository() {
 	render_template templates/_config.yml > "${REPO_DIR}/_config.yml"
 
 	cd ${REPO_DIR}/${ARCH}
-	find ${BUILD_DIR} -name *.pkg.tar.zst -exec cp -f {} . \;
+	find ${PKGS_DIR} -name *.pkg.tar.zst -exec cp -f {} . \;
 	repo-add "${GITHUB_REPO_OWNER}.db.tar.gz" *.pkg.tar.zst
 	rename '.tar.gz' '' *.tar.gz	# repo-add originally creates links, this basically replaces them with the actual db archives
 }
